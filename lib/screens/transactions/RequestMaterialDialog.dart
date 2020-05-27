@@ -114,9 +114,9 @@ class _RequestMaterialDialogState extends State<RequestMaterialDialog> {
                     requestDateTime = DateFormat.yMd().add_jm().format(DateTime.now()).toString();
 
                     ModelForRequest toReceiver = ModelForRequest(uid: receiverUid, name: receiverName, credit: requestCredit,
-                                                                dateTime: requestDateTime, status: 'pending');
+                                                                dateTime: requestDateTime, status: 'Pending');
                     ModelForRequest fromSender = ModelForRequest(uid: senderUid, name: senderName, credit: requestCredit,
-                                                                  dateTime: requestDateTime, status: 'pending');
+                                                                  dateTime: requestDateTime, status: 'Pending');
 
                     // adding request details in sender node
                     await DatabaseService(uid: senderUid).insertRequestDetails(toReceiver, 'to').then((value) async {
