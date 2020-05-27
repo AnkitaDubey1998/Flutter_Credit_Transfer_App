@@ -156,4 +156,16 @@ class DatabaseService {
   }
 
 
+  // get all requests sent by current user to other users
+  Stream<QuerySnapshot> get sentRequests {
+    return requestCollection.document(uid).collection('to').snapshots();
+  }
+
+
+  // get all requests received by current user from other users
+  Stream<QuerySnapshot> get receivedRequests {
+    return requestCollection.document(uid).collection('from').snapshots();
+  }
+
+
 }

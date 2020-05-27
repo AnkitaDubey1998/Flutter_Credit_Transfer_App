@@ -38,10 +38,16 @@ class _MainPageState extends State<MainPage> {
         );
 
       case 2:
-        return Requests();
+        return StreamProvider<QuerySnapshot>.value(
+            value: DatabaseService(uid: currentUser.uid).sentRequests,
+            child: Requests()
+        );
 
       case 3:
-        return Approve();
+        return StreamProvider<QuerySnapshot>.value(
+            value: DatabaseService(uid: currentUser.uid).receivedRequests,
+            child: Approve()
+        );
 
       case 4:
         return StreamProvider<DocumentSnapshot>.value(
@@ -70,6 +76,7 @@ class _MainPageState extends State<MainPage> {
       ),
       body: callPage(_currentIndex),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         selectedItemColor: Colors.deepPurple[900],
         onTap: (index) {
