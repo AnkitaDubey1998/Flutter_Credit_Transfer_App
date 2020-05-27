@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "917729408465",
+    "firebase_url": "https://flutter-credit-transfer.firebaseio.com",
+    "project_id": "flutter-credit-transfer",
+    "storage_bucket": "flutter-credit-transfer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917729408465:android:a9bb15fd68339e315c1cf0",
+        "android_client_info": {
+          "package_name": "com.example.credittransferapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917729408465-7js47gu8q11u9i8bbrdkjub48qv3sdvp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ6HrpPfXqHDRqFm2mD7oLM_pQ_Y8yHPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917729408465-7js47gu8q11u9i8bbrdkjub48qv3sdvp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917729408465:android:e2df72178b94bb7f5c1cf0",
+        "android_client_info": {
+          "package_name": "com.example.fluttercredittransferapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917729408465-7js47gu8q11u9i8bbrdkjub48qv3sdvp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ6HrpPfXqHDRqFm2mD7oLM_pQ_Y8yHPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917729408465-7js47gu8q11u9i8bbrdkjub48qv3sdvp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
