@@ -176,36 +176,19 @@ class _TransferCreditState extends State<TransferCredit> {
               SizedBox(
                 height: 30.0,
               ),
-//              Center(
-//                child: RaisedButton(
-//                  onPressed: () {
-//                    showDialog(
-//                      context: context,
-//                      builder: (context) {
-//                        return StreamProvider<DocumentSnapshot>.value(
-//                          value: DatabaseService(uid: currentUser.uid).userData,
-//                          child: TransferMaterialDialog(
-//                              receiverUid: userData.data['uid']
-//                          ),
-//                        );
-//                      }
-//                    );
-//                  },
-//                  color: Colors.deepPurple[900],
-//                  child: Text(
-//                    'Transfer Credit',
-//                    style: TextStyle(
-//                      color: Colors.white,
-//                    ),
-//                  ),
-//                ),
-//              ),
               Container(
                 padding: EdgeInsets.all(10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     RaisedButton(
+                      color: Colors.deepPurple[900],
+                      child: Text(
+                        'Transfer Credit',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                       onPressed: () {
                         showDialog(
                             context: context,
@@ -219,31 +202,8 @@ class _TransferCreditState extends State<TransferCredit> {
                             }
                         );
                       },
-                      color: Colors.deepPurple[900],
-                      child: Text(
-                        'Transfer Credit',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
                     ),
                     RaisedButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return RequestMaterialDialog(
-                                receiverUid: userData.data['uid'],
-                              );
-//                              return StreamProvider<DocumentSnapshot>.value(
-//                                value: DatabaseService(uid: currentUser.uid).userData,
-//                                child: TransferMaterialDialog(
-//                                    receiverUid: userData.data['uid']
-//                                ),
-//                              );
-                            }
-                        );
-                      },
                       color: Colors.deepPurple[900],
                       child: Text(
                         'Request Credit',
@@ -251,6 +211,16 @@ class _TransferCreditState extends State<TransferCredit> {
                           color: Colors.white,
                         ),
                       ),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return RequestMaterialDialog(
+                                receiverUid: userData.data['uid'],
+                              );
+                            }
+                        );
+                      },
                     ),
                   ],
                 ),

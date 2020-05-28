@@ -27,6 +27,7 @@ class _RequestMaterialDialogState extends State<RequestMaterialDialog> {
   String senderName;
   String receiverUid;
   String receiverName;
+  String requestId;
   String requestCredit = '';
   String requestDateTime;
 
@@ -113,10 +114,14 @@ class _RequestMaterialDialogState extends State<RequestMaterialDialog> {
                     // date and time of request
                     requestDateTime = DateFormat.yMd().add_jm().format(DateTime.now()).toString();
 
-                    ModelForRequest toReceiver = ModelForRequest(uid: receiverUid, name: receiverName, credit: requestCredit,
-                                                                dateTime: requestDateTime, status: 'Pending');
-                    ModelForRequest fromSender = ModelForRequest(uid: senderUid, name: senderName, credit: requestCredit,
-                                                                  dateTime: requestDateTime, status: 'Pending');
+                    // generating request ID
+                    requestId = await DatabaseService().requestCollection.document(senderUid).collection('to').document().documentID.toString();
+
+                    // creating two request objects
+                    ModelForRequest toReceiver = ModelForRequest(requestId: requestId, uid: receiverUid, name: receiverName,
+                                                                  credit: requestCredit, dateTime: requestDateTime, status: 'Pending');
+                    ModelForRequest fromSender = ModelForRequest(requestId: requestId, uid: senderUid, name: senderName,
+                                                                  credit: requestCredit, dateTime: requestDateTime, status: 'Pending');
 
                     // adding request details in sender node
                     await DatabaseService(uid: senderUid).insertRequestDetails(toReceiver, 'to').then((value) async {

@@ -15,11 +15,13 @@ exports.TransferNotification = functions.firestore.document('transactions/{recei
 
 	var type = ''
 	var senderName = '';
+	var requestCredit = '';
 
 	await admin.firestore().doc('transactions/'+receiverUid+'/'+receiverUid+'/'+transactionId).get()
 	.then(doc => {
 		type = doc.data().type;
 		senderName = doc.data().name;
+		requestCredit = doc.data().credit;
 		return true;
 	})
 	.catch(error => {
@@ -29,8 +31,12 @@ exports.TransferNotification = functions.firestore.document('transactions/{recei
 
 	console.log('type: ', type);
 	console.log('sender name: ', senderName);
+	console.log('credit: ', requestCredit);
 
-	if(type == 'from') {
+	if(type === 'from') {
+		console.log('inside if statement');
+
+
 		return await admin.firestore().doc('users/'+receiverUid).get()
 		.then(doc => {
 			var deviceTokens = doc.data().deviceTokens;
@@ -58,7 +64,7 @@ exports.TransferNotification = functions.firestore.document('transactions/{recei
 	    	return false;
 		});
 
-		} else {
+	} else {
 		console.log('this is "to" type transaction');
 		return console.log('not valid');
 	}

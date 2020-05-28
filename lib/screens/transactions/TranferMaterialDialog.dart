@@ -29,6 +29,7 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
   String receiverUid;
   String receiverCredit;
   String receiverName;
+  String transactionId;
   String transactionCredit = '';
   String transactionDateTime;
 
@@ -114,6 +115,13 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
                 height: 20.0,
               ),
               RaisedButton(
+                color: Colors.deepPurple[900],
+                child: Text(
+                  'Transfer Credit',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
                 onPressed: () async {
                   if(_formKey.currentState.validate()) {
                     await progressDialog.show();
@@ -123,6 +131,7 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
                     senderName = senderUser.data['name'];
                     receiverUid = widget.receiverUid;
 
+                    // getting name and credit of receiver from database
                     List<String> receiverUser = await DatabaseService(uid: widget.receiverUid).getUserNameCredit();
                     receiverName = receiverUser[0];
                     receiverCredit = receiverUser[1];
@@ -134,14 +143,15 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
                     // date and time of transaction
                     transactionDateTime = DateFormat.yMd().add_jm().format(DateTime.now()).toString();
 
+                    // generating transaction ID
+                    transactionId = await DatabaseService().transactionCollection.document(senderUid).collection(senderUid).document().documentID.toString();
+
                     // creating two transaction objects
-                    ModelForTransaction toReceiver = ModelForTransaction(uid: receiverUid, type: 'to', name: receiverName,
+                    ModelForTransaction toReceiver = ModelForTransaction(transactionId: transactionId, uid: receiverUid, type: 'to', name: receiverName,
                                                                               credit: transactionCredit, dateTime: transactionDateTime);
 
-                    ModelForTransaction fromSender = ModelForTransaction(uid: senderUid, type: 'from', name: senderName,
+                    ModelForTransaction fromSender = ModelForTransaction(transactionId: transactionId, uid: senderUid, type: 'from', name: senderName,
                                                                           credit: transactionCredit, dateTime: transactionDateTime);
-
-
 
                     // updating sender details in database
                     await DatabaseService().updateCreditDetails(senderUid, senderCredit).then((value) async {
@@ -152,7 +162,7 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
                           // adding transaction detail of receiver in database
                           await DatabaseService(uid: receiverUid).insertTransactionDetails(fromSender).then((value) async {
                             await progressDialog.hide();
-                            Fluttertoast.showToast(msg: "Creditd transferred successfully", toastLength: Toast.LENGTH_LONG);
+                            Fluttertoast.showToast(msg: "Credit transferred successfully", toastLength: Toast.LENGTH_LONG);
                           }).catchError((error) {
                             Fluttertoast.showToast(msg: "error: "+error, toastLength: Toast.LENGTH_LONG);
                           });
@@ -170,13 +180,6 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
 
                   }
                 },
-                color: Colors.deepPurple[900],
-                child: Text(
-                  'Transfer Credit',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
               ),
             ],
           ),

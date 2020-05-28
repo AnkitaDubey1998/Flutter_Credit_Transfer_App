@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttercredittransferapp/screens/models/ModelForRequest.dart';
 import 'package:fluttercredittransferapp/screens/models/ModelForTransaction.dart';
 
@@ -51,7 +50,6 @@ class DatabaseService {
   Future<List<dynamic>> getUserDeviceTokens() async {
     try {
       return await userCollection.document(uid).get().then((value) {
-//        print(value.data['deviceTokens'].runtimeType);
         return value.data['deviceTokens'];
       });
     } catch(e) {
@@ -86,7 +84,8 @@ class DatabaseService {
   Future insertTransactionDetails(ModelForTransaction t) async {
     try{
       await Firestore.instance.runTransaction((transaction) async {
-        await transactionCollection.document(uid).collection(uid).add({
+        await transactionCollection.document(uid).collection(uid).document(t.transactionId).setData({
+          'transactionId': t.transactionId,
           'uid': t.uid,
           'name': t.name,
           'type': t.type,
@@ -105,7 +104,8 @@ class DatabaseService {
     try {
       if(type == 'to') {
         await Firestore.instance.runTransaction((transaction) async {
-          await requestCollection.document(uid).collection(type).add({
+          await requestCollection.document(uid).collection(type).document(request.requestId).setData({
+            'requestId': request.requestId,
             'receiverUid': request.uid,
             'receiverName': request.name,
             'credit': request.credit,
@@ -115,7 +115,8 @@ class DatabaseService {
         });
       } else {
         await Firestore.instance.runTransaction((transaction) async {
-          await requestCollection.document(uid).collection(type).add({
+          await requestCollection.document(uid).collection(type).document(request.requestId).setData({
+            'requestId': request.requestId,
             'senderUid': request.uid,
             'senderName': request.name,
             'credit': request.credit,
@@ -125,7 +126,16 @@ class DatabaseService {
         });
       }
     } catch(e) {
+      return e;
+    }
+  }
 
+
+  Future updateRequestStatus(String requestId, String type, String status) async {
+    try {
+      await requestCollection.document(uid).collection(type).document(requestId).updateData({'status': status});
+    } catch(e) {
+      return e;
     }
   }
 

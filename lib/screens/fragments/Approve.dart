@@ -25,8 +25,8 @@ class _ApproveState extends State<Approve> {
     requests.clear();
 
     for (var doc in receivedRequests.documents) {
-      requests.add(ModelForRequest(uid: doc.data['senderUid'], name: doc.data['senderName'], status: doc.data['status'],
-          credit: doc.data['credit'], dateTime: doc.data['dateTime']));
+      requests.add(ModelForRequest(requestId: doc.data['requestId'], uid: doc.data['senderUid'], name: doc.data['senderName'],
+                                    status: doc.data['status'], credit: doc.data['credit'], dateTime: doc.data['dateTime']));
     }
 
     return ListView.builder(

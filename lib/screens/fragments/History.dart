@@ -24,7 +24,7 @@ class _HistoryState extends State<History> {
 
     transactions.clear();
     for (var doc in transactionHistory.documents) {
-      transactions.add(ModelForTransaction(uid: doc.data['uid'], name: doc.data['name'], type: doc.data['type'],
+      transactions.add(ModelForTransaction(transactionId: doc.data['transactionId'], uid: doc.data['uid'], name: doc.data['name'], type: doc.data['type'],
                                             credit: doc.data['credit'], dateTime: doc.data['dateTime']));
     }
 

@@ -25,8 +25,8 @@ class _RequestsState extends State<Requests> {
     requests.clear();
 
     for (var doc in sentRequests.documents) {
-      requests.add(ModelForRequest(uid: doc.data['receiverUid'], name: doc.data['receiverName'], status: doc.data['status'],
-          credit: doc.data['credit'], dateTime: doc.data['dateTime']));
+      requests.add(ModelForRequest(requestId: doc.data['requestId'], uid: doc.data['receiverUid'], name: doc.data['receiverName'],
+                    status: doc.data['status'], credit: doc.data['credit'], dateTime: doc.data['dateTime']));
     }
 
     return ListView.builder(
