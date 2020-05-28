@@ -31,7 +31,7 @@ class RowForRequests extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        request.name,
+                        request.name ?? '',
                         style: TextStyle(
                             fontSize: 18.0
                         ),

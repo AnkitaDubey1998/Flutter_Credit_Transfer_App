@@ -29,6 +29,14 @@ class _RequestsState extends State<Requests> {
                     status: doc.data['status'], credit: doc.data['credit'], dateTime: doc.data['dateTime']));
     }
 
+    if(requests.length == 0) {
+      return Center(
+        child: Text(
+            "You didn't made any request till now"
+        ),
+      );
+    }
+
     return ListView.builder(
         itemCount: requests.length,
         itemBuilder: (context, index) {

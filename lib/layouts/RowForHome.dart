@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 class RowForHome extends StatelessWidget {
 
   final ModelForUser user;
+  String defaultUrl = 'https://firebasestorage.googleapis.com/v0/b/flutter-credit-transfer.appspot.com/o/Profile%20Images%2Fimage_picker806541594.jpg?alt=media&token=c4eebf83-fb70-4048-9995-28d4694755dc';
 
   RowForHome({ this.user });
 

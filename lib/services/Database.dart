@@ -9,7 +9,7 @@ class DatabaseService {
   DatabaseService({ this.uid });
 
 
-  // user collection and transaction collection references
+  // user collection, transaction collection and request collection references
   final CollectionReference userCollection = Firestore.instance.collection('users');
   final CollectionReference transactionCollection = Firestore.instance.collection('transactions');
   final CollectionReference requestCollection = Firestore.instance.collection('requests');

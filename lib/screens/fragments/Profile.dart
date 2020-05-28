@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -208,7 +209,22 @@ class _ProfileState extends State<Profile> {
             Center(
               child: RaisedButton(
                 onPressed: () async {
+                  List<dynamic> tokens = await DatabaseService(uid: currentUser.uid).getUserDeviceTokens();
+                  String deviceToken;
+                  FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+                  await firebaseMessaging.getToken().then((token) {
+                    deviceToken = token;
+                  });
+                  if(tokens.contains(deviceToken)) {
+                    tokens.remove(deviceToken);
+                    await DatabaseService(uid: currentUser.uid).insertDeviceToken(tokens).then((value) {
+
+                    }).catchError((error) {
+                      Fluttertoast.showToast(msg: "error: "+error, toastLength: Toast.LENGTH_LONG);
+                    });
+                  }
                   await _auth.signOut();
+                  Fluttertoast.showToast(msg: "Logged out successful", toastLength: Toast.LENGTH_LONG);
                 },
                 color: Colors.deepPurple[900],
                 child: Text(

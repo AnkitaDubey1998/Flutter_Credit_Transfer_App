@@ -18,14 +18,22 @@ class _HistoryState extends State<History> {
 
     final transactionHistory = Provider.of<QuerySnapshot>(context);
 
+    transactions.clear();
     if(transactionHistory == null) {
       return Center(child: CircularProgressIndicator());
     }
 
-    transactions.clear();
     for (var doc in transactionHistory.documents) {
       transactions.add(ModelForTransaction(transactionId: doc.data['transactionId'], uid: doc.data['uid'], name: doc.data['name'], type: doc.data['type'],
                                             credit: doc.data['credit'], dateTime: doc.data['dateTime']));
+    }
+
+    if(transactions.length == 0) {
+      return Center(
+        child: Text(
+            "You have not done any transactions till now"
+        ),
+      );
     }
 
     return ListView.builder(

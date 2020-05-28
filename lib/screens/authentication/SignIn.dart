@@ -156,7 +156,6 @@ class _SignInState extends State<SignIn> {
                             Fluttertoast.showToast(msg: "Login failed", toastLength: Toast.LENGTH_LONG);
                           } else {
                             List<dynamic> tokens = await DatabaseService(uid: user.uid).getUserDeviceTokens();
-                            print(tokens);
                             String deviceToken;
                             FirebaseMessaging firebaseMessaging = FirebaseMessaging();
                             await firebaseMessaging.getToken().then((token) {

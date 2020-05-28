@@ -57,13 +57,13 @@ class RowForApprove extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          request.name,
+                          request.name ?? '',
                           style: TextStyle(
                               fontSize: 18.0
                           ),
                         ),
                         Text(
-                          request.status,
+                          request.status ?? '',
                           style: TextStyle(
                               fontSize: 14.0
                           ),

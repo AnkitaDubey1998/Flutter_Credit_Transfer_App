@@ -21,16 +21,24 @@ class _HomeState extends State<Home> {
     final usersData = Provider.of<QuerySnapshot>(context);
     final currentUser = Provider.of<FirebaseUser>(context);
 
+    users.clear();
     if(usersData == null) {
       return Center(child: CircularProgressIndicator());
     }
 
-    users.clear();
     for(var doc in usersData.documents) {
       if(doc.data['uid'] != currentUser.uid) {
         users.add(ModelForUser(uid: doc.data['uid'], name: doc.data['name'], email: doc.data['email'],
                                 gender: doc.data['gender'], credit: doc.data['credit'], image: doc.data['image']));
       }
+    }
+
+    if(users.length == 0) {
+      return Center(
+        child: Text(
+            "There are no other users"
+        ),
+      );
     }
 
     return ListView.builder(
