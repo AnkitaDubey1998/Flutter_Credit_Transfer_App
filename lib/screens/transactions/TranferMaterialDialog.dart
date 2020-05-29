@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttercredittransferapp/screens/models/ModelForTransaction.dart';
 import 'package:fluttercredittransferapp/services/Database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -77,6 +78,7 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
             children: <Widget>[
               TextFormField(
                 keyboardType: TextInputType.number,
+                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                 onChanged: (value) {
                   setState(() => transactionCredit = value);
                 },
@@ -85,6 +87,8 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
                     return 'Enter credit to be transfered';
                   } else if(int.parse(value) > int.parse(senderUser.data['credit'])) {
                     return "You don't have enough credit to transfer";
+                  } else if (int.parse(value) == 0) {
+                    return "You cannot transfer 0 credit";
                   } else {
                     return null;
                   }

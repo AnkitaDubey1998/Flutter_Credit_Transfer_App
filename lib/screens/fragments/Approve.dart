@@ -32,7 +32,7 @@ class _ApproveState extends State<Approve> {
     if(requests.length == 0) {
       return Center(
         child: Text(
-            "You didn't made any request till now"
+            "You didn't receive any request till now"
         ),
       );
     }

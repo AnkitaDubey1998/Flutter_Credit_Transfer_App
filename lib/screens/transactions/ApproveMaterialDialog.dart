@@ -24,6 +24,7 @@ class _ApproveMaterialDialogState extends State<ApproveMaterialDialog> {
 
   ProgressDialog approveProgressDialog;
   ProgressDialog declineProgressDialog;
+  ProgressDialog progressDialog;
 
   String requestId;
   String requestCredit;
@@ -53,28 +54,43 @@ class _ApproveMaterialDialogState extends State<ApproveMaterialDialog> {
     requestId = widget.requestId;
     requestCredit = widget.requestCredit;
 
-    approveProgressDialog = ProgressDialog(
-        context,
-        type: ProgressDialogType.Download,
-        isDismissible: true
-    );
-    approveProgressDialog.style(
-      message: 'Transferring credit...',
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      elevation: 10.0,
-      insetAnimCurve: Curves.easeInOut,
-      progress: 0.0,
-      maxProgress: 100.0,
-    );
+//    approveProgressDialog = ProgressDialog(
+//        context,
+//        type: ProgressDialogType.Download,
+//        isDismissible: true
+//    );
+//    approveProgressDialog.style(
+//      message: 'Transferring credit...',
+//      borderRadius: 10.0,
+//      backgroundColor: Colors.white,
+//      elevation: 10.0,
+//      insetAnimCurve: Curves.easeInOut,
+//      progress: 0.0,
+//      maxProgress: 100.0,
+//    );
+//
+//    declineProgressDialog = ProgressDialog(
+//        context,
+//        type: ProgressDialogType.Normal,
+//        isDismissible: true
+//    );
+//    declineProgressDialog.style(
+//      message: 'Declining...',
+//      borderRadius: 10.0,
+//      backgroundColor: Colors.white,
+//      elevation: 10.0,
+//      insetAnimCurve: Curves.easeInOut,
+//      progress: 0.0,
+//      maxProgress: 100.0,
+//    );
 
-    declineProgressDialog = ProgressDialog(
+    progressDialog = ProgressDialog(
         context,
         type: ProgressDialogType.Normal,
         isDismissible: true
     );
-    declineProgressDialog.style(
-      message: 'Declining...',
+    progressDialog.style(
+      message: 'Processing...',
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
@@ -183,13 +199,13 @@ class _ApproveMaterialDialogState extends State<ApproveMaterialDialog> {
 
   // method for declining request
   declineRequest() async {
-    await declineProgressDialog.show();
+    await progressDialog.show();
 
     // updating status of request sent by receiver to the sender
     await DatabaseService(uid: receiverUid).updateRequestStatus(requestId, 'to', 'Declined').then((value) async {
       // updating status of request received by sender from the receiver
       await DatabaseService(uid: senderUid).updateRequestStatus(requestId, 'from', 'Declined').then((value) async {
-        await declineProgressDialog.hide();
+        await progressDialog.hide();
         Fluttertoast.showToast(msg: "Request declined", toastLength: Toast.LENGTH_LONG);
       }).catchError((error) {
         Fluttertoast.showToast(msg: "error: "+error, toastLength: Toast.LENGTH_LONG);
@@ -203,7 +219,7 @@ class _ApproveMaterialDialogState extends State<ApproveMaterialDialog> {
 
   // method for approving request
   approveRequest() async {
-    await approveProgressDialog.show();
+    await progressDialog.show();
 
     // getting name and credit of receiver from database
     List<String> receiverUser = await DatabaseService(uid: receiverUid).getUserNameCredit();
@@ -239,7 +255,7 @@ class _ApproveMaterialDialogState extends State<ApproveMaterialDialog> {
             await DatabaseService(uid: senderUid).insertTransactionDetails(toReceiver).then((value) async {
               // adding transaction detail of receiver in database
               await DatabaseService(uid: receiverUid).insertTransactionDetails(fromSender).then((value) async {
-                await approveProgressDialog.hide();
+                await progressDialog.hide();
                 Fluttertoast.showToast(msg: "Credit transferred successfully", toastLength: Toast.LENGTH_LONG);
               }).catchError((error) {
                 Fluttertoast.showToast(msg: "error: "+error, toastLength: Toast.LENGTH_LONG);

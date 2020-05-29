@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttercredittransferapp/screens/models/ModelForRequest.dart';
 import 'package:fluttercredittransferapp/services/Database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -63,13 +64,16 @@ class _RequestMaterialDialogState extends State<RequestMaterialDialog> {
               ),
               TextFormField(
                 keyboardType: TextInputType.number,
+                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                 onChanged: (value) {
                   setState(() => requestCredit = value);
                 },
                 validator: (value) {
                   if(value.isEmpty) {
                     return 'Enter credit value';
-                  }  else {
+                  } else if (int.parse(value) == 0) {
+                    return "You cannot request 0 credit";
+                  } else {
                     return null;
                   }
                 },

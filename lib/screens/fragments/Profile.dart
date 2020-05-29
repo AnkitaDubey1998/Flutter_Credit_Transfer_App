@@ -326,12 +326,13 @@ class _ProfileState extends State<Profile> {
                       await progressDialog.show();
                       FirebaseStorage _storage = FirebaseStorage(storageBucket: 'gs://flutter-credit-transfer.appspot.com');
                       String newImageUrl = await _storage.ref().child('Default profile image.png').getDownloadURL();
-                      await DatabaseService(uid: currentUser.uid).updateUserProfileImage(newImageUrl).then((value) {
+                      await DatabaseService(uid: currentUser.uid).updateUserProfileImage(newImageUrl).then((value) async {
+                        await progressDialog.hide();
                         Fluttertoast.showToast(msg: "Profile image removed successfully", toastLength: Toast.LENGTH_LONG);
                       }).catchError((error) {
                         Fluttertoast.showToast(msg: "error"+error.toString(), toastLength: Toast.LENGTH_LONG);
                       });
-                      await progressDialog.hide();
+
                       Navigator.of(context).pop();
                     },
                     child: Column(
@@ -409,7 +410,8 @@ class _ProfileState extends State<Profile> {
                           String imagePath = basename(imageFile.path);
                           String newImageUrl = await uploadImage(imageFile, imagePath);
                           if(newImageUrl != null) {
-                            await DatabaseService(uid: currentUser.uid).updateUserProfileImage(newImageUrl).then((value) {
+                            await DatabaseService(uid: currentUser.uid).updateUserProfileImage(newImageUrl).then((value) async {
+                              await progressDialog.hide();
                               Fluttertoast.showToast(msg: "Profile image updated successfully", toastLength: Toast.LENGTH_LONG);
                             }).catchError((error) {
                               Fluttertoast.showToast(msg: "error"+error.toString(), toastLength: Toast.LENGTH_LONG);
@@ -417,7 +419,6 @@ class _ProfileState extends State<Profile> {
                           } else {
                             print('unsuccessful');
                           }
-                          await progressDialog.hide();
                           Navigator.of(context).pop();
                         },
                         color: Colors.deepPurple[900],
