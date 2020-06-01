@@ -17,7 +17,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
 
-  final AuthService _auth = AuthService();
+  final AuthServices _auth = AuthServices();
   final _formKey = GlobalKey<FormState>();
   ProgressDialog progressDialog;
 
@@ -149,7 +149,7 @@ class _SignInState extends State<SignIn> {
                             await progressDialog.hide();
                             Fluttertoast.showToast(msg: "Login failed", toastLength: Toast.LENGTH_LONG);
                           } else {
-                            List<dynamic> tokens = await DatabaseService(uid: user.uid).getUserDeviceTokens();
+                            List<dynamic> tokens = await DatabaseServices(uid: user.uid).getUserDeviceTokens();
                             String deviceToken;
                             FirebaseMessaging firebaseMessaging = FirebaseMessaging();
                             await firebaseMessaging.getToken().then((token) {
@@ -157,7 +157,7 @@ class _SignInState extends State<SignIn> {
                             });
                             if(!tokens.contains(deviceToken)) {
                               tokens.add(deviceToken);
-                              await DatabaseService(uid: user.uid).insertDeviceToken(tokens).then((value) {
+                              await DatabaseServices(uid: user.uid).insertDeviceToken(tokens).then((value) {
 
                               }).catchError((error) {
                                 Fluttertoast.showToast(msg: "error: "+error, toastLength: Toast.LENGTH_LONG);

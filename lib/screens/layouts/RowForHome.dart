@@ -18,7 +18,7 @@ class RowForHome extends StatelessWidget {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => StreamProvider<DocumentSnapshot>.value(
-                value: DatabaseService(uid: user.uid).userData,
+                value: DatabaseServices(uid: user.uid).userData,
                 child: TransferCredit(),
             )
         ));

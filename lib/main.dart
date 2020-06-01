@@ -4,16 +4,21 @@ import 'package:fluttercredittransferapp/screens/Wrapper.dart';
 import 'package:fluttercredittransferapp/services/Auth.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MaterialApp(
+  home: MyApp(),
+));
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<FirebaseUser>.value(
-      value: AuthService().user,
-      child: MaterialApp(
-        home: Wrapper(),
-      ),
+      value: AuthServices().user,
+      child: Wrapper(),
     );
   }
 }

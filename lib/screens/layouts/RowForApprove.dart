@@ -24,7 +24,7 @@ class RowForApprove extends StatelessWidget {
               context: context,
               builder: (context) {
                 return StreamProvider<DocumentSnapshot>.value(
-                    value: DatabaseService(uid: currentUser.uid).userData,
+                    value: DatabaseServices(uid: currentUser.uid).userData,
                     child: ApproveMaterialDialog(
                         requestId: request.requestId,
                         requestCredit: request.credit,

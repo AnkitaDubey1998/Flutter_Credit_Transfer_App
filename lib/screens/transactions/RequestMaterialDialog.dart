@@ -104,8 +104,8 @@ class _RequestMaterialDialogState extends State<RequestMaterialDialog> {
                     senderUid = currentUser.uid;
                     receiverUid = widget.receiverUid;
 
-                    List<String> receiverUser = await DatabaseService(uid: widget.receiverUid).getUserNameCredit();
-                    List<String> senderUser = await DatabaseService(uid: senderUid).getUserNameCredit();
+                    List<String> receiverUser = await DatabaseServices(uid: widget.receiverUid).getUserNameCredit();
+                    List<String> senderUser = await DatabaseServices(uid: senderUid).getUserNameCredit();
                     receiverName = receiverUser[0];
                     senderName = senderUser[0];
 
@@ -113,7 +113,7 @@ class _RequestMaterialDialogState extends State<RequestMaterialDialog> {
                     requestDateTime = DateFormat.yMd().add_jm().format(DateTime.now()).toString();
 
                     // generating request ID
-                    requestId = await DatabaseService().requestCollection.document(senderUid).collection('to').document().documentID.toString();
+                    requestId = await DatabaseServices().requestCollection.document(senderUid).collection('to').document().documentID.toString();
 
                     // creating two request objects
                     ModelForRequest toReceiver = ModelForRequest(requestId: requestId, uid: receiverUid, name: receiverName,
@@ -122,9 +122,9 @@ class _RequestMaterialDialogState extends State<RequestMaterialDialog> {
                                                                   credit: requestCredit, dateTime: requestDateTime, status: 'Pending');
 
                     // adding request details in sender node
-                    await DatabaseService(uid: senderUid).insertRequestDetails(toReceiver, 'to').then((value) async {
+                    await DatabaseServices(uid: senderUid).insertRequestDetails(toReceiver, 'to').then((value) async {
                       // adding request details in receiver node
-                      await DatabaseService(uid: receiverUid).insertRequestDetails(fromSender, 'from').then((value) async {
+                      await DatabaseServices(uid: receiverUid).insertRequestDetails(fromSender, 'from').then((value) async {
                         await progressDialog.hide();
                         Fluttertoast.showToast(msg: "Requested successfully", toastLength: Toast.LENGTH_LONG);
                       }).catchError((error) {

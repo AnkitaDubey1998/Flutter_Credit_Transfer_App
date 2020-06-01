@@ -194,7 +194,7 @@ class _TransferCreditState extends State<TransferCredit> {
                             context: context,
                             builder: (context) {
                               return StreamProvider<DocumentSnapshot>.value(
-                                value: DatabaseService(uid: currentUser.uid).userData,
+                                value: DatabaseServices(uid: currentUser.uid).userData,
                                 child: TransferMaterialDialog(
                                     receiverUid: userData.data['uid']
                                 ),

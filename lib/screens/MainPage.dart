@@ -27,37 +27,37 @@ class _MainPageState extends State<MainPage> {
     switch(currentIndex) {
       case 0:
         return StreamProvider<QuerySnapshot>.value(
-            value: DatabaseService().users,
+            value: DatabaseServices().users,
             child: Home()
         );
 
       case 1:
         return StreamProvider<QuerySnapshot>.value(
-            value: DatabaseService(uid: currentUser.uid).transactionHistory,
+            value: DatabaseServices(uid: currentUser.uid).transactionHistory,
             child: History()
         );
 
       case 2:
         return StreamProvider<QuerySnapshot>.value(
-            value: DatabaseService(uid: currentUser.uid).sentRequests,
+            value: DatabaseServices(uid: currentUser.uid).sentRequests,
             child: Requests()
         );
 
       case 3:
         return StreamProvider<QuerySnapshot>.value(
-            value: DatabaseService(uid: currentUser.uid).receivedRequests,
+            value: DatabaseServices(uid: currentUser.uid).receivedRequests,
             child: Approve()
         );
 
       case 4:
         return StreamProvider<DocumentSnapshot>.value(
-            value: DatabaseService(uid: currentUser.uid).userData,
+            value: DatabaseServices(uid: currentUser.uid).userData,
             child: Profile()
         );
 
       default:
         return StreamProvider<QuerySnapshot>.value(
-            value: DatabaseService().users,
+            value: DatabaseServices().users,
             child: Home()
         );
     }

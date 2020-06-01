@@ -198,9 +198,9 @@ class _ApproveMaterialDialogState extends State<ApproveMaterialDialog> {
     await declineProgressDialog.show();
 
     // updating status of request sent by receiver to the sender
-    await DatabaseService(uid: receiverUid).updateRequestStatus(requestId, 'to', 'Declined').then((value) async {
+    await DatabaseServices(uid: receiverUid).updateRequestStatus(requestId, 'to', 'Declined').then((value) async {
       // updating status of request received by sender from the receiver
-      await DatabaseService(uid: senderUid).updateRequestStatus(requestId, 'from', 'Declined').then((value) async {
+      await DatabaseServices(uid: senderUid).updateRequestStatus(requestId, 'from', 'Declined').then((value) async {
         await declineProgressDialog.hide();
         Fluttertoast.showToast(msg: "Request declined", toastLength: Toast.LENGTH_LONG);
       }).catchError((error) {
@@ -226,7 +226,7 @@ class _ApproveMaterialDialogState extends State<ApproveMaterialDialog> {
     await approveProgressDialog.show();
 
     // getting name and credit of receiver from database
-    List<String> receiverUser = await DatabaseService(uid: receiverUid).getUserNameCredit();
+    List<String> receiverUser = await DatabaseServices(uid: receiverUid).getUserNameCredit();
     receiverName = receiverUser[0];
     receiverCredit = receiverUser[1];
 
@@ -238,7 +238,7 @@ class _ApproveMaterialDialogState extends State<ApproveMaterialDialog> {
     transactionDateTime = DateFormat.yMd().add_jm().format(DateTime.now()).toString();
 
     // generating transaction ID
-    transactionId = await DatabaseService().transactionCollection.document(senderUid).collection(senderUid).document().documentID.toString();
+    transactionId = await DatabaseServices().transactionCollection.document(senderUid).collection(senderUid).document().documentID.toString();
 
     // creating two transaction objects
     ModelForTransaction toReceiver = ModelForTransaction(transactionId: transactionId, uid: receiverUid, type: 'to', name: receiverName,
@@ -248,17 +248,17 @@ class _ApproveMaterialDialogState extends State<ApproveMaterialDialog> {
         credit: requestCredit, dateTime: transactionDateTime);
 
     // updating status of request sent by receiver to the sender
-    await DatabaseService(uid: receiverUid).updateRequestStatus(requestId, 'to', 'Approved').then((value) async {
+    await DatabaseServices(uid: receiverUid).updateRequestStatus(requestId, 'to', 'Approved').then((value) async {
       // updating status of request received by sender from the receiver
-      await DatabaseService(uid: senderUid).updateRequestStatus(requestId, 'from', 'Approved').then((value) async {
+      await DatabaseServices(uid: senderUid).updateRequestStatus(requestId, 'from', 'Approved').then((value) async {
         // updating sender details in database
-        await  DatabaseService().updateCreditDetails(senderUid, senderCredit).then((value) async {
+        await  DatabaseServices().updateCreditDetails(senderUid, senderCredit).then((value) async {
           // updating receiver details in database
-          await DatabaseService().updateCreditDetails(receiverUid, receiverCredit).then((value) async {
+          await DatabaseServices().updateCreditDetails(receiverUid, receiverCredit).then((value) async {
             // adding transaction detail of sender in database
-            await DatabaseService(uid: senderUid).insertTransactionDetails(toReceiver).then((value) async {
+            await DatabaseServices(uid: senderUid).insertTransactionDetails(toReceiver).then((value) async {
               // adding transaction detail of receiver in database
-              await DatabaseService(uid: receiverUid).insertTransactionDetails(fromSender).then((value) async {
+              await DatabaseServices(uid: receiverUid).insertTransactionDetails(fromSender).then((value) async {
                 await approveProgressDialog.hide();
                 Fluttertoast.showToast(msg: "Credit transferred successfully", toastLength: Toast.LENGTH_LONG);
               }).catchError((error) {

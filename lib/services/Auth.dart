@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttercredittransferapp/services/Database.dart';
 
-class AuthService {
+class AuthServices {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -53,7 +53,7 @@ class AuthService {
       FirebaseUser user = result.user;
 
       // create new document of user
-      await DatabaseService(uid: user.uid).insertUserData(name, email, gender, credit, image, deviceTokens);
+      await DatabaseServices(uid: user.uid).insertUserData(name, email, gender, credit, image, deviceTokens);
       return user;
     } catch(e) {
       print("register error");

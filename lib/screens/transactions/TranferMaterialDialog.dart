@@ -130,7 +130,7 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
                     receiverUid = widget.receiverUid;
 
                     // getting name and credit of receiver from database
-                    List<String> receiverUser = await DatabaseService(uid: widget.receiverUid).getUserNameCredit();
+                    List<String> receiverUser = await DatabaseServices(uid: widget.receiverUid).getUserNameCredit();
                     receiverName = receiverUser[0];
                     receiverCredit = receiverUser[1];
 
@@ -142,7 +142,7 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
                     transactionDateTime = DateFormat.yMd().add_jm().format(DateTime.now()).toString();
 
                     // generating transaction ID
-                    transactionId = await DatabaseService().transactionCollection.document(senderUid).collection(senderUid).document().documentID.toString();
+                    transactionId = await DatabaseServices().transactionCollection.document(senderUid).collection(senderUid).document().documentID.toString();
 
                     // creating two transaction objects
                     ModelForTransaction toReceiver = ModelForTransaction(transactionId: transactionId, uid: receiverUid, type: 'to', name: receiverName,
@@ -152,13 +152,13 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
                                                                           credit: transactionCredit, dateTime: transactionDateTime);
 
                     // updating sender details in database
-                    await DatabaseService().updateCreditDetails(senderUid, senderCredit).then((value) async {
+                    await DatabaseServices().updateCreditDetails(senderUid, senderCredit).then((value) async {
                       // updating receiver details in database
-                      await DatabaseService().updateCreditDetails(receiverUid, receiverCredit).then((value) async {
+                      await DatabaseServices().updateCreditDetails(receiverUid, receiverCredit).then((value) async {
                         // adding transaction detail of sender in database
-                        await DatabaseService(uid: senderUid).insertTransactionDetails(toReceiver).then((value) async {
+                        await DatabaseServices(uid: senderUid).insertTransactionDetails(toReceiver).then((value) async {
                           // adding transaction detail of receiver in database
-                          await DatabaseService(uid: receiverUid).insertTransactionDetails(fromSender).then((value) async {
+                          await DatabaseServices(uid: receiverUid).insertTransactionDetails(fromSender).then((value) async {
                             await progressDialog.hide();
                             Fluttertoast.showToast(msg: "Credit transferred successfully", toastLength: Toast.LENGTH_LONG);
                           }).catchError((error) {

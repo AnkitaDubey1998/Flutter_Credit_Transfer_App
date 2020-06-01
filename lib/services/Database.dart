@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttercredittransferapp/screens/models/ModelForRequest.dart';
 import 'package:fluttercredittransferapp/screens/models/ModelForTransaction.dart';
 
-class DatabaseService {
+class DatabaseServices {
 
   final String uid;
 
-  DatabaseService({ this.uid });
+  DatabaseServices({ this.uid });
 
 
   // user collection, transaction collection and request collection references
