@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttercredittransferapp/layouts/RowForHistory.dart';
+import 'package:fluttercredittransferapp/screens/layouts/RowForHistory.dart';
 import 'package:fluttercredittransferapp/screens/models/ModelForTransaction.dart';
 import 'package:provider/provider.dart';
 

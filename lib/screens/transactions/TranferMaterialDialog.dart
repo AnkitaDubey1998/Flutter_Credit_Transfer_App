@@ -45,17 +45,11 @@ class _TransferMaterialDialogState extends State<TransferMaterialDialog> {
 
     progressDialog = ProgressDialog(
         context,
-        type: ProgressDialogType.Download,
+        type: ProgressDialogType.Normal,
         isDismissible: true
     );
     progressDialog.style(
       message: 'Transferring credit...',
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      elevation: 10.0,
-      insetAnimCurve: Curves.easeInOut,
-      progress: 0.0,
-      maxProgress: 100.0,
     );
 
     return MaterialDialog(

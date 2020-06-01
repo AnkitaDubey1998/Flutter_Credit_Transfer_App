@@ -28,12 +28,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
     progressDialog.style(
       message: 'Sending link...',
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      elevation: 10.0,
-      insetAnimCurve: Curves.easeInOut,
-      progress: 0.0,
-      maxProgress: 100.0,
     );
 
     return Scaffold(

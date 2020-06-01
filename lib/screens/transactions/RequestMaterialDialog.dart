@@ -44,12 +44,6 @@ class _RequestMaterialDialogState extends State<RequestMaterialDialog> {
     );
     progressDialog.style(
       message: 'Requesting...',
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      elevation: 10.0,
-      insetAnimCurve: Curves.easeInOut,
-      progress: 0.0,
-      maxProgress: 100.0,
     );
 
     return MaterialDialog(

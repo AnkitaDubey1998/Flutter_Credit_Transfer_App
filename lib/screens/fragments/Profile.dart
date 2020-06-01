@@ -22,6 +22,7 @@ class _ProfileState extends State<Profile> {
 
   final AuthService _auth = AuthService();
   ProgressDialog progressDialog;
+  ProgressDialog signOutProgressDialog;
   ModelForUser currentUser;
   File imageFile;
 
@@ -35,21 +36,6 @@ class _ProfileState extends State<Profile> {
 
     currentUser = ModelForUser(uid: currentUserData.data['uid'], name: currentUserData.data['name'], email: currentUserData.data['email'],
                                     gender: currentUserData.data['gender'], credit: currentUserData.data['credit'], image: currentUserData.data['image']);
-
-    progressDialog = ProgressDialog(
-                      context,
-                      type: ProgressDialogType.Download,
-                      isDismissible: true
-                    );
-    progressDialog.style(
-        message: 'Changing Profile Image...',
-        borderRadius: 10.0,
-        backgroundColor: Colors.white,
-        elevation: 10.0,
-        insetAnimCurve: Curves.easeInOut,
-        progress: 0.0,
-        maxProgress: 100.0,
-    );
 
     return SingleChildScrollView(
       child: Padding(
@@ -72,13 +58,13 @@ class _ProfileState extends State<Profile> {
                       width: 35,
                       child: FittedBox(
                         child: FloatingActionButton(
-                          onPressed: () {
-                            _showChoiceDialog(context);
-                          },
                           child: Icon(
                             Icons.add,
                           ),
                           backgroundColor: Colors.deepPurple[900],
+                          onPressed: () async {
+                            await _showChoiceDialog(context);
+                          },
                         ),
                       ),
                     ),
@@ -208,24 +194,6 @@ class _ProfileState extends State<Profile> {
             ),
             Center(
               child: RaisedButton(
-                onPressed: () async {
-                  List<dynamic> tokens = await DatabaseService(uid: currentUser.uid).getUserDeviceTokens();
-                  String deviceToken;
-                  FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-                  await firebaseMessaging.getToken().then((token) {
-                    deviceToken = token;
-                  });
-                  if(tokens.contains(deviceToken)) {
-                    tokens.remove(deviceToken);
-                    await DatabaseService(uid: currentUser.uid).insertDeviceToken(tokens).then((value) {
-
-                    }).catchError((error) {
-                      Fluttertoast.showToast(msg: "error: "+error, toastLength: Toast.LENGTH_LONG);
-                    });
-                  }
-                  await _auth.signOut();
-                  Fluttertoast.showToast(msg: "Logged out successful", toastLength: Toast.LENGTH_LONG);
-                },
                 color: Colors.deepPurple[900],
                 child: Text(
                   'Sign Out',
@@ -233,6 +201,40 @@ class _ProfileState extends State<Profile> {
                     color: Colors.white,
                   ),
                 ),
+                onPressed: () async {
+                  signOutProgressDialog = ProgressDialog(
+                      context,
+                      type: ProgressDialogType.Normal,
+                      isDismissible: true
+                  );
+                  signOutProgressDialog.style(
+                    message: 'Signing out...',
+                  );
+                  await signOutProgressDialog.show();
+
+                  // getting all devices tokens of current user from database
+                  List<dynamic> tokens = await DatabaseService(uid: currentUser.uid).getUserDeviceTokens();
+                  String deviceToken;
+                  FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+                  // getting token of current device of the user
+                  await firebaseMessaging.getToken().then((token) {
+                    deviceToken = token;
+                  });
+                  if(tokens.contains(deviceToken)) {
+                    tokens.remove(deviceToken);           // removing current device token from tokens list
+                    // updating tokens list in database
+                    await DatabaseService(uid: currentUser.uid).insertDeviceToken(tokens).then((value) {
+
+                    }).catchError((error) {
+                      Fluttertoast.showToast(msg: "error: "+error, toastLength: Toast.LENGTH_LONG);
+                    });
+                  }
+
+                  // signing out
+                  await _auth.signOut();
+                  await signOutProgressDialog.hide();
+                  Fluttertoast.showToast(msg: "Logged out successful", toastLength: Toast.LENGTH_LONG);
+                },
               ),
             ),
           ],
@@ -257,7 +259,7 @@ class _ProfileState extends State<Profile> {
                   child: GestureDetector(
                     onTap: () async {
                       await _openGallery(context);
-                      await _showImageDialog(context);
+                      await _showImageDialog(context, imageFile);
                     },
                     child: Column(
                       children: <Widget>[
@@ -292,7 +294,7 @@ class _ProfileState extends State<Profile> {
                   child: GestureDetector(
                     onTap: () async {
                       await _openCamera(context);
-                      await _showImageDialog(context);
+                      await _showImageDialog(context, imageFile);
                     },
                     child: Column(
                       children: <Widget>[
@@ -390,7 +392,7 @@ class _ProfileState extends State<Profile> {
 
 
   // Dialog which shows the selected image
-  Future<void> _showImageDialog(BuildContext context) {
+  Future<void> _showImageDialog(BuildContext context, File imageFile) {
 
     if(imageFile != null) {
       return showDialog(
@@ -405,22 +407,6 @@ class _ProfileState extends State<Profile> {
                     children: <Widget>[
                       Image.file(imageFile),
                       RaisedButton(
-                        onPressed: () async {
-                          await progressDialog.show();
-                          String imagePath = basename(imageFile.path);
-                          String newImageUrl = await uploadImage(imageFile, imagePath);
-                          if(newImageUrl != null) {
-                            await DatabaseService(uid: currentUser.uid).updateUserProfileImage(newImageUrl).then((value) async {
-                              await progressDialog.hide();
-                              Fluttertoast.showToast(msg: "Profile image updated successfully", toastLength: Toast.LENGTH_LONG);
-                            }).catchError((error) {
-                              Fluttertoast.showToast(msg: "error"+error.toString(), toastLength: Toast.LENGTH_LONG);
-                            });
-                          } else {
-                            print('unsuccessful');
-                          }
-                          Navigator.of(context).pop();
-                        },
                         color: Colors.deepPurple[900],
                         child: Text(
                           'Upload',
@@ -428,6 +414,114 @@ class _ProfileState extends State<Profile> {
                             color: Colors.white,
                           ),
                         ),
+                        onPressed: () async {
+                          try {
+                            final result = await InternetAddress.lookup('google.com');
+                            if(result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                              String imagePath = basename(imageFile.path);
+
+                              FirebaseStorage _storage = FirebaseStorage(storageBucket: 'gs://flutter-credit-transfer.appspot.com');
+                              StorageReference _imageStorageReference = _storage.ref().child('Profile Images/${currentUser.uid}/');
+
+                              String newImageUrl;
+                              StorageUploadTask _uploadTask = await _imageStorageReference.child('${currentUser.uid}.png').putFile(imageFile);
+
+//                          progressDialog = ProgressDialog(
+//                              context,
+//                              type: ProgressDialogType.Download,
+//                              isDismissible: true
+//                          );
+//                          progressDialog.style(
+//                            message: 'Changing Profile Image...',
+//                            progress: 0.0,
+//                            maxProgress: 100.0,
+//                          );
+//                          if(!progressDialog.isShowing()) {
+//                            await progressDialog.show();
+//                          }
+
+
+                              progressDialog= ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: true);
+                              progressDialog.style(message:"Uploading Image...",progress:0.00,maxProgress: 100.00);
+                              if(!progressDialog.isShowing()){
+                                await progressDialog.show();
+                              }
+                              await _uploadTask.events.listen((event) async{
+                                double progressPercent= event!=null ? event.snapshot.bytesTransferred.toDouble()/event.snapshot.totalByteCount.toDouble() : 0;
+                                if(_uploadTask.isInProgress){
+                                  print(progressPercent*100);
+                                  progressDialog.update(progress: double.parse((progressPercent*100).toStringAsFixed(2)));
+                                }
+
+                                if(_uploadTask.isComplete){
+                                  var downloadUrl = await (await _uploadTask.onComplete).ref.getDownloadURL();
+                                  String imageUrl = downloadUrl.toString();
+                                  print('hi');
+                                  print(imageUrl);
+                                  DatabaseService(uid: currentUser.uid).updateUserProfileImage(imageUrl.toString());
+                                  if(progressDialog.isShowing()){
+                                    progressDialog.hide();
+                                  }
+                                  Navigator.pop(context);
+                                  Fluttertoast.showToast(msg: "Upload Successful",toastLength: Toast.LENGTH_LONG);
+                                }
+
+                              });
+
+//                          String imagePath = basename(imageFile.path);
+//                          FirebaseStorage _storage = FirebaseStorage(storageBucket: 'gs://flutter-credit-transfer.appspot.com');
+//                          StorageReference _imageStorageReference = _storage.ref().child('Profile Images');
+//
+//                          String newImageUrl;
+//                          StorageUploadTask _uploadTask = await _imageStorageReference.child(imagePath).putFile(imageFile);
+
+//                          await _uploadTask.events.listen((event) async {
+//                            double progressPercent = event == null ? 0 : 100 *(event.snapshot.bytesTransferred.toDouble()/event.snapshot.totalByteCount.toDouble());
+//                            if(_uploadTask.isInProgress) {
+//                              print(progressPercent);
+//                              progressDialog.update(progress: double.parse(progressPercent.toStringAsFixed(2)));
+//                            }
+//                            if (_uploadTask.isComplete) {
+//                              StorageTaskSnapshot storageTaskSnapshot = await _uploadTask.onComplete;
+//                              newImageUrl = await storageTaskSnapshot.ref.getDownloadURL();
+//
+//                              await DatabaseService(uid: currentUser.uid).updateUserProfileImage(newImageUrl).then((value) async {
+//                                await progressDialog.hide();
+//                                Navigator.of(context).pop();
+//                                Fluttertoast.showToast(msg: "Profile image updated successfully", toastLength: Toast.LENGTH_LONG);
+//
+//                              }).catchError((error) {
+//                                Fluttertoast.showToast(msg: "error"+error.toString(), toastLength: Toast.LENGTH_LONG);
+//                              });
+//                            }
+//                          });
+
+//                          await DatabaseService(uid: currentUser.uid).updateUserProfileImage(newImageUrl).then((value) async {
+//                            await progressDialog.hide();
+//                            Fluttertoast.showToast(msg: "Profile image updated successfully", toastLength: Toast.LENGTH_LONG);
+//                          }).catchError((error) {
+//                            Fluttertoast.showToast(msg: "error"+error.toString(), toastLength: Toast.LENGTH_LONG);
+//                          });
+
+//                          String newImageUrl = await uploadImage(imageFile, imagePath);
+//                          if(newImageUrl != null) {
+//                            await DatabaseService(uid: currentUser.uid).updateUserProfileImage(newImageUrl).then((value) async {
+//                              await progressDialog.hide();
+//                              Fluttertoast.showToast(msg: "Profile image updated successfully", toastLength: Toast.LENGTH_LONG);
+//                            }).catchError((error) {
+//                              Fluttertoast.showToast(msg: "error"+error.toString(), toastLength: Toast.LENGTH_LONG);
+//                            });
+//                          } else {
+//                            print('unsuccessful');
+//                          }
+
+//                          Navigator.of(context).pop();
+                            }
+                          } on SocketException catch(e) {
+                            Fluttertoast.showToast(msg: "No Internet Connection",toastLength: Toast.LENGTH_LONG);
+                          }
+
+                        },
                       ),
                     ],
                   ),
@@ -442,29 +536,42 @@ class _ProfileState extends State<Profile> {
 
 
   // uploading image to firebase storage
-  Future uploadImage(File imageFile, String imagePath) async {
-    FirebaseStorage _storage = FirebaseStorage(storageBucket: 'gs://flutter-credit-transfer.appspot.com');
-    StorageReference _imageStorageReference = _storage.ref().child('Profile Images');
-
-    try{
-      String newImageUrl;
-      StorageUploadTask uploadTask = _imageStorageReference.child(imagePath).putFile(imageFile);
-      if(uploadTask.isSuccessful || uploadTask.isComplete) {
-        newImageUrl = await _imageStorageReference.getDownloadURL();
-      } else if (uploadTask.isInProgress) {
-        uploadTask.events.listen((event) {
-          double percentage = 100 *(event.snapshot.bytesTransferred.toDouble()
-              / event.snapshot.totalByteCount.toDouble());
-          print(percentage);
-        });
-        StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-        newImageUrl = await storageTaskSnapshot.ref.getDownloadURL();
-      }
-      return newImageUrl;
-    } catch(e) {
-      Fluttertoast.showToast(msg: "error"+e.toString(), toastLength: Toast.LENGTH_LONG);
-      return null;
-    }
-  }
+//  Future uploadImage(File imageFile, String imagePath) async {
+//    FirebaseStorage _storage = FirebaseStorage(storageBucket: 'gs://flutter-credit-transfer.appspot.com');
+//    StorageReference _imageStorageReference = _storage.ref().child('Profile Images');
+//
+//    try{
+//      String newImageUrl;
+//      StorageUploadTask _uploadTask = await _imageStorageReference.child(imagePath).putFile(imageFile);
+//
+//      await _uploadTask.events.listen((event) async {
+//        double progressPercent = event == null ? 0 : 100 *(event.snapshot.bytesTransferred.toDouble()/event.snapshot.totalByteCount.toDouble());
+//        if(_uploadTask.isInProgress) {
+//          print(progressPercent);
+//          progressDialog.update(progress: double.parse(progressPercent.toStringAsFixed(2)));
+//        } else if (_uploadTask.isComplete) {
+//          StorageTaskSnapshot storageTaskSnapshot = await _uploadTask.onComplete;
+//          newImageUrl = await storageTaskSnapshot.ref.getDownloadURL();
+//        }
+//      });
+//
+////      if(uploadTask.isSuccessful || uploadTask.isComplete) {
+////        newImageUrl = await _imageStorageReference.getDownloadURL();
+////      } else if (uploadTask.isInProgress) {
+////        uploadTask.events.listen((event) {
+////          double percentage = 100 *(event.snapshot.bytesTransferred.toDouble()
+////              / event.snapshot.totalByteCount.toDouble());
+////          print(percentage);
+////          progressDialog.update(progress: double.parse(percentage.toStringAsFixed(2)));
+////        });
+////        StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+////        newImageUrl = await storageTaskSnapshot.ref.getDownloadURL();
+//      }
+//      return newImageUrl;
+//    } catch(e) {
+//      Fluttertoast.showToast(msg: "error"+e.toString(), toastLength: Toast.LENGTH_LONG);
+//      return null;
+//    }
+//  }
 
 }

@@ -38,7 +38,7 @@ dependencies:
   material_dialog: ^0.0.9
   intl: ^0.16.1
   image_picker: ^0.6.6+1
-  progress_dialog: ^1.2.3
+  progress_dialog: ^1.2.2
   cloud_functions: ^0.5.0
   firebase_messaging: ^6.0.15
 
