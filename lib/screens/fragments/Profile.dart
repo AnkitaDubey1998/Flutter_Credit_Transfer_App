@@ -435,6 +435,7 @@ class _ProfileState extends State<Profile> {
 
   // uploading image to firebase storage
   Future _uploadImage(BuildContext context) async {
+    Navigator.pop(context);
     try {
       final result = await InternetAddress.lookup('google.com');
       if(result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -445,7 +446,7 @@ class _ProfileState extends State<Profile> {
 
         progressDialog = ProgressDialog(
             context,
-            type: ProgressDialogType.Normal,
+            type: ProgressDialogType.Download,
             isDismissible: true
         );
         progressDialog.style(
