@@ -435,7 +435,6 @@ class _ProfileState extends State<Profile> {
 
   // uploading image to firebase storage
   Future _uploadImage(BuildContext context) async {
-    Navigator.pop(context);
     try {
       final result = await InternetAddress.lookup('google.com');
       if(result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
