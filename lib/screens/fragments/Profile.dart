@@ -327,6 +327,9 @@ class _ProfileState extends State<Profile> {
                     onTap: () async {
                       await progressDialog.show();
                       FirebaseStorage _storage = FirebaseStorage(storageBucket: 'gs://flutter-credit-transfer.appspot.com');
+//                      StorageReference _imageStorageReference = _storage.ref().child('Profile Images/${currentUser.uid}/${currentUser.uid}.png');
+//                      await _imageStorageReference.delete();
+
                       String newImageUrl = await _storage.ref().child('Default profile image.png').getDownloadURL();
                       await DatabaseServices(uid: currentUser.uid).updateUserProfileImage(newImageUrl).then((value) async {
                         await progressDialog.hide();
@@ -445,7 +448,7 @@ class _ProfileState extends State<Profile> {
 
         progressDialog = ProgressDialog(
             context,
-            type: ProgressDialogType.Download,
+            type: ProgressDialogType.Normal,
             isDismissible: true
         );
         progressDialog.style(
@@ -474,7 +477,7 @@ class _ProfileState extends State<Profile> {
               progressDialog.hide();
             }
             Navigator.pop(context);
-            Fluttertoast.showToast(msg: "Upload Successful",toastLength: Toast.LENGTH_LONG);
+            Fluttertoast.showToast(msg: "Profile Image changed successfully",toastLength: Toast.LENGTH_LONG);
           }
         });
       }
