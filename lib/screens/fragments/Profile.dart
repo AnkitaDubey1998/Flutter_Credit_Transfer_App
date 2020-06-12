@@ -325,11 +325,24 @@ class _ProfileState extends State<Profile> {
                   flex: 1,
                   child: GestureDetector(
                     onTap: () async {
+                      progressDialog = ProgressDialog(
+                          context,
+                          type: ProgressDialogType.Normal,
+                          isDismissible: true
+                      );
+                      progressDialog.style(
+                        message: 'Changing Profile Image...',
+                        progress: 0.0,
+                        maxProgress: 100.0,
+                      );
                       await progressDialog.show();
-                      FirebaseStorage _storage = FirebaseStorage(storageBucket: 'gs://flutter-credit-transfer.appspot.com');
-//                      StorageReference _imageStorageReference = _storage.ref().child('Profile Images/${currentUser.uid}/${currentUser.uid}.png');
-//                      await _imageStorageReference.delete();
 
+                      // Deleting current profile image from Firebase Storage
+                      FirebaseStorage _storage = FirebaseStorage(storageBucket: 'gs://flutter-credit-transfer.appspot.com');
+                      StorageReference _imageStorageReference = _storage.ref().child('Profile Images/${currentUser.uid}/${currentUser.uid}.png');
+                      await _imageStorageReference.delete();
+
+                      // getting download url of defaul profile image from Firebase Storage
                       String newImageUrl = await _storage.ref().child('Default profile image.png').getDownloadURL();
                       await DatabaseServices(uid: currentUser.uid).updateUserProfileImage(newImageUrl).then((value) async {
                         await progressDialog.hide();
@@ -470,7 +483,7 @@ class _ProfileState extends State<Profile> {
           if(_uploadTask.isComplete){
             var downloadUrl = await (await _uploadTask.onComplete).ref.getDownloadURL();
             String imageUrl = downloadUrl.toString();
-            print('hi');
+            print('Image URL:');
             print(imageUrl);
             DatabaseServices(uid: currentUser.uid).updateUserProfileImage(imageUrl.toString());
             if(progressDialog.isShowing()){
