@@ -108,7 +108,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       },
                       color: Colors.deepPurple[900],
                       child: Text(
-                        'Sign In',
+                        'Send Link',
                         style: TextStyle(
                           color: Colors.white,
                         ),

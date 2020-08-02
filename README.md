@@ -1,16 +1,25 @@
-# fluttercredittransferapp
+# Credit Transfer App (Flutter)
 
-A new Flutter application.
+- In Credit Transfer App users can register themselves after which they will be provided with 1000 credits (points).
+- The users can then login into the app and send credits to other users of the app.
+- The user can also request other users for credit.
+- On receiving a request from other users, the logged in user can either Approve or Decline the request.
+- The user can keep track of all his transactions in the history section.
+- There is also a feature of changing or removing the profile image of the user.
+- The users also receive a notification after they receieve credits as well as after getting requests for transferring credit.
+- This is a dummy project in Flutter which can be further extended for production purpose.
+- For demo of this project, go to <b><i>https://www.youtube.com/watch?v=N5hxyKDqVyQ&feature=youtu.be</i></b> or refer <b><i>Flutter_Credit_Transfer_Demo.mp4</i><b>
+- The APK file of the project is available in this repository. Refer <b><i>Flutter_Credit_Transfer.apk</i></b> file.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Frontend and Backend Details
 
-A few resources to get you started if this is your first Flutter project:
+Flutter components used:
+- Rows, Columns, Buttons, TextFields
+- Stream Provider for fetching details from database
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Firebase services used for backend:
+- Firebase Authentication
+- Firebase Database
+- Firebase Storage
+- Firebase Functions
