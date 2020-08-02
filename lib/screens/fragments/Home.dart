@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
     return ListView.builder(
       itemCount: users.length,
       itemBuilder: (context, index) {
-        return RowForHome(user: users[index]);
+        return RowForHome(user: users[index], currentUserUid: currentUser.uid);
       },
     );
   }

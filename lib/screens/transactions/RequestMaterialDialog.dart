@@ -11,9 +11,10 @@ import 'package:provider/provider.dart';
 
 class RequestMaterialDialog extends StatefulWidget {
 
+  String currentUserUid;
   String receiverUid;
 
-  RequestMaterialDialog({ this.receiverUid });
+  RequestMaterialDialog({ this.currentUserUid, this.receiverUid });
 
   @override
   _RequestMaterialDialogState createState() => _RequestMaterialDialogState();
@@ -35,7 +36,7 @@ class _RequestMaterialDialogState extends State<RequestMaterialDialog> {
   @override
   Widget build(BuildContext context) {
 
-    final currentUser = Provider.of<FirebaseUser>(context);
+//    final currentUser = Provider.of<FirebaseUser>(context);
 
     progressDialog = ProgressDialog(
         context,
@@ -101,7 +102,7 @@ class _RequestMaterialDialogState extends State<RequestMaterialDialog> {
                   if(_formKey.currentState.validate()) {
                     await progressDialog.show();
 
-                    senderUid = currentUser.uid;
+                    senderUid = widget.currentUserUid;
                     receiverUid = widget.receiverUid;
 
                     List<String> receiverUser = await DatabaseServices(uid: widget.receiverUid).getUserNameCredit();

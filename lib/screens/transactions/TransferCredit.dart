@@ -8,6 +8,11 @@ import 'package:fluttercredittransferapp/services/Database.dart';
 import 'package:provider/provider.dart';
 
 class TransferCredit extends StatefulWidget {
+
+  String currentUserUid;
+
+  TransferCredit({ this.currentUserUid });
+
   @override
   _TransferCreditState createState() => _TransferCreditState();
 }
@@ -17,7 +22,7 @@ class _TransferCreditState extends State<TransferCredit> {
   @override
   Widget build(BuildContext context) {
 
-    final currentUser = Provider.of<FirebaseUser>(context);
+//    final currentUser = Provider.of<FirebaseUser>(context);
     final userData = Provider.of<DocumentSnapshot>(context);
 
     if(userData == null) {
@@ -194,7 +199,7 @@ class _TransferCreditState extends State<TransferCredit> {
                             context: context,
                             builder: (context) {
                               return StreamProvider<DocumentSnapshot>.value(
-                                value: DatabaseServices(uid: currentUser.uid).userData,
+                                value: DatabaseServices(uid: widget.currentUserUid).userData,
                                 child: TransferMaterialDialog(
                                     receiverUid: userData.data['uid']
                                 ),
@@ -216,6 +221,7 @@ class _TransferCreditState extends State<TransferCredit> {
                             context: context,
                             builder: (context) {
                               return RequestMaterialDialog(
+                                currentUserUid: widget.currentUserUid,
                                 receiverUid: userData.data['uid'],
                               );
                             }

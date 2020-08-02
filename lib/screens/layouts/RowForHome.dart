@@ -8,9 +8,10 @@ import 'package:provider/provider.dart';
 class RowForHome extends StatelessWidget {
 
   final ModelForUser user;
+  final  String currentUserUid;
   String defaultUrl = 'https://firebasestorage.googleapis.com/v0/b/flutter-credit-transfer.appspot.com/o/Profile%20Images%2Fimage_picker806541594.jpg?alt=media&token=c4eebf83-fb70-4048-9995-28d4694755dc';
 
-  RowForHome({ this.user });
+  RowForHome({ this.user, this.currentUserUid });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class RowForHome extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => StreamProvider<DocumentSnapshot>.value(
                 value: DatabaseServices(uid: user.uid).userData,
-                child: TransferCredit(),
+                child: TransferCredit(currentUserUid: currentUserUid),
             )
         ));
       },

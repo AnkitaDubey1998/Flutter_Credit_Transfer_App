@@ -73,7 +73,7 @@ class _RegisterState extends State<Register> {
                       onChanged: (value) {
                         setState(() => inputName = value);
                       },
-                      validator: (value) => value.isEmpty ? "Name feild cannot be empty" : null,
+                      validator: (value) => value.isEmpty ? "Name field cannot be empty" : null,
                       decoration: InputDecoration(
                         hintText: 'John Stuart',
                         labelText: "Name",
@@ -105,7 +105,7 @@ class _RegisterState extends State<Register> {
                       },
                       validator: (value) {
                         if(value.isEmpty) {
-                          return "Email feild cannot be empty";
+                          return "Email field cannot be empty";
                         } else if (!EmailValidator.validate(value)) {
                           return "Enter valid email address";
                         } else {
@@ -144,7 +144,7 @@ class _RegisterState extends State<Register> {
                       },
                       validator: (value) {
                         if(value.length < 6) {
-                          return "Password must be atleast pf 6 characters";
+                          return "Password must be atleast of 6 characters";
                         } else {
                           return null;
                         }
@@ -195,7 +195,7 @@ class _RegisterState extends State<Register> {
                         }
                       },
                       decoration: InputDecoration(
-                        hintText: 'Should be at least 6 characters',
+                        hintText: 'Should be at least of 6 characters',
                         labelText: "Confirm Password",
                         labelStyle: TextStyle(
                           color: Colors.deepPurple[900],
@@ -315,6 +315,8 @@ class _RegisterState extends State<Register> {
                             dynamic result = await _auth.registerWithEmailAndPassword(inputName, inputEmail, inputPassword, gender, "1000", image, deviceTokens);
                             if(result == null) {
                               setState(() => error = 'Please provide valid information');
+                              await progressDialog.hide();
+                              Fluttertoast.showToast(msg: "Could not register", toastLength: Toast.LENGTH_LONG);
                             } else {
                               setState(() => error = '');
                               await progressDialog.hide();
