@@ -15,10 +15,12 @@
 ## Frontend and Backend Details
 
 Flutter components used:
+
 - Rows, Columns, Buttons, TextFields
 - Stream Provider for fetching details from database
 
 Firebase services used for backend:
+
 - Firebase Authentication
 - Firebase Database
 - Firebase Storage
