@@ -25,13 +25,11 @@ Firebase services used for backend:-
 - Firebase Functions
 
 ## Screenshots
-| | | | |
-|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
-|<img src="app_screenshots/1_register.jpeg">|<img src="app_screenshots/2_login.jpeg">|<img src="app_screenshots/3_home.png">|<img src="app_screenshots/6_request_credit.png">|
-|<img src="app_screenshots/4_user_details.jpeg">|<img src="app_screenshots/5_transfer_credit.png">|<img src="app_screenshots/6_request_credit.png">|
+| | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
 |<img src="app_screenshots/1_register.jpeg">|<img src="app_screenshots/2_login.jpeg">|<img src="app_screenshots/3_home.png">|
 |<img src="app_screenshots/4_user_details.jpeg">|<img src="app_screenshots/5_transfer_credit.png">|<img src="app_screenshots/6_request_credit.png">|
-|<img src="app_screenshots/1_register.jpeg">|<img src="app_screenshots/2_login.jpeg">|<img src="app_screenshots/3_home.png">|
-|<img src="app_screenshots/4_user_details.jpeg">|<img src="app_screenshots/5_transfer_credit.png">|<img src="app_screenshots/6_request_credit.png">|
-|<img src="app_screenshots/1_register.jpeg">|<img src="app_screenshots/2_login.jpeg">|<img src="app_screenshots/3_home.png">|
-|<img src="app_screenshots/4_user_details.jpeg">|<img src="app_screenshots/5_transfer_credit.png">|<img src="app_screenshots/6_request_credit.png">|
+|<img src="app_screenshots/7_history.png">|<img src="app_screenshots/8_requests.png">|<img src="app_screenshots/9_approve.png">|
+|<img src="app_screenshots/10_approve_dialog.png">|<img src="app_screenshots/11_profile.png">|<img src="app_screenshots/12_change_profile_image.png">|
+|<img src="app_screenshots/13_upload_profile_image.jpeg">|<img src="app_screenshots/2_login14_changed_profile_imagejpeg">|<img src="app_screenshots/15_removed_rofile_image.jpeg">|
+|<img src="app_screenshots/16forget_password.png">|||
