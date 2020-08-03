@@ -8,8 +8,8 @@
 - There is also a feature of changing or removing the profile image of the user.
 - The users also receive a notification after they receieve credits as well as after getting requests for transferring credit.
 - This is a dummy project in Flutter which can be further extended for production purpose.
-- For demo of this project, go to <b><i>https://www.youtube.com/watch?v=N5hxyKDqVyQ&feature=youtu.be</i></b> or refer <b><i>Flutter_Credit_Transfer_Demo.mp4</i></b>
-- The APK file of the project is available in this repository. Refer <b><i>Flutter_Credit_Transfer.apk</i></b> file.
+- For demo of this project, go to <b><i>https://www.youtube.com/watch?v=N5hxyKDqVyQ&feature=youtu.be</i></b> or <b><i>https://drive.google.com/drive/folders/1DJp3GWOqgovpB2LLzvy-uGL5Spmz8_Cc?usp=sharing</i></b> or refer <b><i>Flutter_Credit_Transfer_Demo.mp4</i></b>
+- The APK file of the project is available in this repository. Refer <b><i>Flutter_Credit_Transfer.apk</i></b> file or go to <b><i>https://drive.google.com/drive/folders/1DJp3GWOqgovpB2LLzvy-uGL5Spmz8_Cc?usp=sharing</i></b>.
 
 
 ## Frontend and Backend Details
