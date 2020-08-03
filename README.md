@@ -31,5 +31,5 @@ Firebase services used for backend:-
 |<img src="app_screenshots/4_user_details.jpeg">|<img src="app_screenshots/5_transfer_credit.png">|<img src="app_screenshots/6_request_credit.png">|
 |<img src="app_screenshots/7_history.png">|<img src="app_screenshots/8_requests.png">|<img src="app_screenshots/9_approve.png">|
 |<img src="app_screenshots/10_approve_dialog.png">|<img src="app_screenshots/11_profile.png">|<img src="app_screenshots/12_change_profile_image.png">|
-|<img src="app_screenshots/13_upload_profile_image.jpeg">|<img src="app_screenshots/14_changed_profile_imagejpeg">|<img src="app_screenshots/15_removed_profile_image.jpeg">|
-|<img src="app_screenshots/16_forget_password.png">|
+|<img src="app_screenshots/13_upload_profile_image.jpeg">|<img src="app_screenshots/14_changed_profile_image.jpeg">|<img src="app_screenshots/15_removed_profile_image.jpeg">|
+|<img src="app_screenshots/16_forgot_password.png">|
